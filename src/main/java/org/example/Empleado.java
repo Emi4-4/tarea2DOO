@@ -5,12 +5,14 @@ public class Empleado implements Invitable {
     private String apellidos;
     private String nombre;
     private String correo;
+    private String departamento;
 
-    public Empleado(String id, String apellidos, String nombre, String correo) {
+    public Empleado(String id, String apellidos, String nombre, String correo, String departamento) {
         this.id = id;
         this.apellidos = apellidos;
         this.nombre = nombre;
         this.correo = correo;
+        this.departamento= departamento;
     }
     public String getId() {
         return id;
@@ -36,8 +38,15 @@ public class Empleado implements Invitable {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+    public String getDepartamento(){
+        return departamento;
+    }
+    public void setDepartamento(String departamento){
+        this.departamento=departamento;
+    }
+
     @Override
-    public void invitar(){
+    public void invitar(Reunion reunion){
         System.out.println("Enviando correo de invitación a: " + nombre + " " + apellidos + " (" + correo + ")");
     }
 
