@@ -11,7 +11,8 @@ public abstract class Reunion {
     private Duration duracionPrevista;
     private Empleado organizador;
     private Instant horaInicio;
-    //private List<Asistencia> asistencia;
+    private Instant horaFin;
+    private List<Asistencia> asistencia;
     private List<Invitacion> invitaciones;
     private List<Empleado> invitados;
     private List<Nota> notas;
@@ -24,6 +25,20 @@ public abstract class Reunion {
         this.duracionPrevista=duracionPrevista;
     }
 
+    public void Iniciar(){
+        this.horaInicio=Instant.now();
+    }
 
+    public void Finalizar(){
+        this.horaFin=Instant.now();
+    }
 
+    public Float calcularTiempoReal(Instant horaInicio, Instant horaFin){
+        if (this.horaInicio != null && this.horaFin != null) {
+            Duration duracion = Duration.between(this.horaInicio, this.horaFin);
+            return (float) duracion.toSeconds();
+        }else{
+            return 0.0f;
+        }
+    }
 }
