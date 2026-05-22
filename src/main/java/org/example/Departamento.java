@@ -12,6 +12,10 @@ public class Departamento implements Invitable{
         this.empleados=new ArrayList<>();
     }
 
+    public void agregarEmpleados(Empleado empleado){
+        empleados.add(empleado);
+        empleado.setDepartamento(this);
+    }
     public int obtenerCantidadEmpleados() {
         return empleados.size();
     }
@@ -21,15 +25,25 @@ public class Departamento implements Invitable{
     }
 
     public List<Empleado> getEmpleados() {
-        return empleados;
+        return new ArrayList<>(empleados);
     }
 
     public String toString() {
         return "Departamento: " + nombre + ", empleados: " + empleados + ".";
     }
 
+    @Override
     public void invitar(Reunion reunion) {
 
     }
 
+    @Override
+    public String getNombreCompleto() {
+        return "";
+    }
+
+    @Override
+    public String getCorreo() {
+        return "";
+    }
 }
