@@ -2,7 +2,6 @@ package org.example;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +13,8 @@ public abstract class Reunion {
     private Instant horaInicio;
     private Instant horaFin;
     private List<Asistencia> asistencias;
-    private List<Invitacion> invitaciones;
+    //private List<Invitacion> invitaciones;
+    private List<Empleado> invitados;
     private List<Nota> notas;
     private List<Invitable> invitados;
     private tipoReunion tipoReunion;
@@ -32,11 +32,14 @@ public abstract class Reunion {
     }
 
     public void setInvitado(Invitable invitado) {
-        invitados.add(invitado);
+        invitados.add((Empleado) invitado);
     }
 
     public void setDepartamento(Departamento depto) {
-        invitados.add(depto);
+        //invitados.add(depto);
+    }
+    public void Iniciar(){
+        this.horaInicio=Instant.now();
     }
 
     public void enviarInvitaciones() {
@@ -44,17 +47,28 @@ public abstract class Reunion {
             invitado.invitar(this);
         }
     }
+    public void Finalizar(){
+        this.horaFin=Instant.now();
+    }
 
+    public Float calcularTiempoReal(Instant horaInicio, Instant horaFin){
+        if (this.horaInicio != null && this.horaFin != null) {
+            Duration duracion = Duration.between(this.horaInicio, this.horaFin);
+            return (float) duracion.toSeconds();
+        }else{
+            return 0.0f;
+        }
+    }
     public void registrarAsistencia(Invitable invitado, Instant horaLlegada) {
         Asistencia asistencia = new Asistencia(invitado);
         // Determinar si es tarde (10 minutos después de hora prevista como ejemplo)
         // desarrollar tema de los atrasos
-        asistencias.add(asistencia);
+        asistencia.add(asistencia);
     }
     public int obtenerTotalAsistencia(){
         int total = 0;
-        for (Asistencia asistencia : asistencias) {
-            if (asistencias.getEstado()) {
+        for (Asistencia asistencia : asistencia) {
+            if (asistencia.getEstado()) {
                 total++;
             }
         }
@@ -63,7 +77,7 @@ public abstract class Reunion {
     }
     public float obtenerPorcentajeAsistencia(){
         int totalAsistencia = obtenerTotalAsistencia();
-        int totalInvitados = asistencias.size(); // Suponiendo que participantes incluye a todos los invitados
+        int totalInvitados = asistencia.size(); // Suponiendo que participantes incluye a todos los invitados
         if (totalInvitados == 0) {
             return 0;
         }
@@ -89,7 +103,7 @@ public abstract class Reunion {
     public Empleado getOrganizador() { return organizador; }
     public tipoReunion getTipoReunion() { return tipoReunion; }
     public List<Invitable> getListaInvitados() { return new ArrayList<>(invitados); }
-    public List<Asistencia> getAsistencias() { return new ArrayList<>(asistencias); }
+    public List<Asistencia> getAsistencias() { return new ArrayList<>(asistencia); }
     public List<Nota> getNotas() { return new ArrayList<>(notas); }
 
     @Override
