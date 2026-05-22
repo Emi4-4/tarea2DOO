@@ -48,11 +48,7 @@ public abstract class Reunion {
     public void registrarAsistencia(Invitable invitado, Instant horaLlegada) {
         Asistencia asistencia = new Asistencia(invitado);
         // Determinar si es tarde (10 minutos después de hora prevista como ejemplo)
-        if (horaLlegada.isAfter(horaPrevista.plus(Duration.ofMinutes(10)))) {
-            asistencia.registrarTardanza(horaLlegada);
-        } else {
-            asistencia.registrarAsistencia(horaLlegada);
-        }
+        // desarrollar tema de los atrasos
         asistencias.add(asistencia);
     }
     public int obtenerTotalAsistencia(){
