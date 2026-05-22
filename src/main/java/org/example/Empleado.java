@@ -44,6 +44,10 @@ public class Empleado implements Invitable {
         System.out.println("Enviando correo de invitación a: " + nombre + " " + apellidos + " (" + correo + ")");
     }
 
+    public String getNombreCompleto() {
+        return this.nombre + " " + this.apellidos;
+    }
+
     @Override
     public String toString() {
         return "Empleado [ID=" + id + ", Nombre=" + nombre + " " + apellidos + ", Correo=" + correo + "]";

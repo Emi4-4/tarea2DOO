@@ -2,6 +2,7 @@ package org.example;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,12 +13,12 @@ public abstract class Reunion {
     private Empleado organizador;
     private Instant horaInicio;
     private Instant horaFin;
+    private tipoReunion tipoReunion;
     private List<Asistencia> asistencias;
     //private List<Invitacion> invitaciones;
-    private List<Empleado> invitados;
     private List<Nota> notas;
     private List<Invitable> invitados;
-    private tipoReunion tipoReunion;
+
 
     public Reunion(Date fecha, Instant horaPrevista, Duration duracionPrevista, Empleado organizador, tipoReunion tipoReu) {
         this.fecha=fecha;
@@ -28,17 +29,15 @@ public abstract class Reunion {
         this.invitados = new ArrayList<>();
         this.notas = new ArrayList<>();
         this.asistencias = new ArrayList<>();
-
     }
 
     public void setInvitado(Invitable invitado) {
-        invitados.add((Empleado) invitado);
+        if (invitado != null) {
+            this.invitados.add(invitado);
+        }
     }
 
-    public void setDepartamento(Departamento depto) {
-        //invitados.add(depto);
-    }
-    public void Iniciar(){
+    public void iniciar(){
         this.horaInicio=Instant.now();
     }
 
@@ -47,11 +46,11 @@ public abstract class Reunion {
             invitado.invitar(this);
         }
     }
-    public void Finalizar(){
+    public void finalizar(){
         this.horaFin=Instant.now();
     }
 
-    public Float calcularTiempoReal(Instant horaInicio, Instant horaFin){
+    public float calcularTiempoReal(){
         if (this.horaInicio != null && this.horaFin != null) {
             Duration duracion = Duration.between(this.horaInicio, this.horaFin);
             return (float) duracion.toSeconds();
@@ -60,15 +59,15 @@ public abstract class Reunion {
         }
     }
     public void registrarAsistencia(Invitable invitado, Instant horaLlegada) {
-        Asistencia asistencia = new Asistencia(invitado);
+        Asistencia nuevaAsistencia = new Asistencia((Empleado) invitado, horaLlegada, true);
         // Determinar si es tarde (10 minutos después de hora prevista como ejemplo)
         // desarrollar tema de los atrasos
-        asistencia.add(asistencia);
+        this.asistencias.add(nuevaAsistencia);
     }
     public int obtenerTotalAsistencia(){
         int total = 0;
-        for (Asistencia asistencia : asistencia) {
-            if (asistencia.getEstado()) {
+        for (Asistencia asistencia : asistencias) {
+            if (asistencia.asistio()) {
                 total++;
             }
         }
@@ -77,18 +76,11 @@ public abstract class Reunion {
     }
     public float obtenerPorcentajeAsistencia(){
         int totalAsistencia = obtenerTotalAsistencia();
-        int totalInvitados = asistencia.size(); // Suponiendo que participantes incluye a todos los invitados
+        int totalInvitados = this.invitados.size(); // Suponiendo que participantes incluye a todos los invitados
         if (totalInvitados == 0) {
             return 0;
         }
         return (totalAsistencia / (float) totalInvitados) * 100;
-
-    }
-    public void iniciar() {
-        this.horaInicio = Instant.now();
-    }
-    public void finalizar(){
-        this.horaFin=Instant.now();
     }
 
     public void setParticipantes(Empleado empleado){
@@ -103,7 +95,7 @@ public abstract class Reunion {
     public Empleado getOrganizador() { return organizador; }
     public tipoReunion getTipoReunion() { return tipoReunion; }
     public List<Invitable> getListaInvitados() { return new ArrayList<>(invitados); }
-    public List<Asistencia> getAsistencias() { return new ArrayList<>(asistencia); }
+    public List<Asistencia> getAsistencias() { return new ArrayList<>(asistencias); }
     public List<Nota> getNotas() { return new ArrayList<>(notas); }
 
     @Override

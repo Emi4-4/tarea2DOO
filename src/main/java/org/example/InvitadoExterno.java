@@ -24,7 +24,6 @@ public class InvitadoExterno implements Invitable {
     public String getCorreo() { return correo; }
     public String getEmpresa() { return empresa; }
 
-    @Override
     public String getNombreCompleto() {
         return nombre + " " + apellidos;
     }
