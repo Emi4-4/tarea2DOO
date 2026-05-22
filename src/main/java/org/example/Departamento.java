@@ -36,14 +36,4 @@ public class Departamento implements Invitable{
     public void invitar(Reunion reunion) {
 
     }
-
-    @Override
-    public String getNombreCompleto() {
-        return "";
-    }
-
-    @Override
-    public String getCorreo() {
-        return "";
-    }
 }
