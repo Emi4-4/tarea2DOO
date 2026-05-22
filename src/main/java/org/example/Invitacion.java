@@ -5,7 +5,6 @@ import java.time.Instant;
 public class Invitacion {
     private Instant hora;
     private Invitable destinatario;
-
     private Reunion reunion;
 
     public Invitacion(Invitable destinatario, Reunion reunion, Instant hora) {
