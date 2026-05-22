@@ -5,7 +5,7 @@ import java.time.Instant;
 public class Retraso extends  Asistencia {
     private Instant hora;
     public Retraso(Empleado empleado,Instant hora) {
-        super(empleado);
+        super(empleado,hora,true);
         this.hora = hora;
     }
     public Instant getHora() {
@@ -17,7 +17,6 @@ public class Retraso extends  Asistencia {
     }
     @Override
     public String toString() {
-        return "[Retraso] El empleado " + super.getEmpleado().getNombre() + " " +
-                super.getEmpleado().getApellidos() + " llegó tarde a las: " + hora;
+        return "[Retraso] El empleado " + getEmpleado().getNombreCompleto() + " llegó tarde a las: " + hora;
     }
 }

@@ -16,4 +16,29 @@ public class Asistencia {
     public boolean asistio() {
         return asiste;
     }
+
+    public void setAsiste(boolean asiste) {
+        this.asiste = asiste;
+    }
+
+    public Empleado getEmpleado() {
+        return this.empleado;
+    }
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    public Instant getHoraLlegada() {
+        return this.horaLlegada;
+    }
+
+    public void setHoraLlegada(Instant horaLlegada) {
+        this.horaLlegada = horaLlegada;
+    }
+
+    @Override
+    public String toString() {
+        return "Asistencia [" + (empleado != null ? empleado.getNombreCompleto() : "Sin nombre") +
+                ", Llegada=" + horaLlegada + ", Asistió=" + asiste + "]";
+    }
 }
