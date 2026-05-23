@@ -18,6 +18,7 @@ public abstract class Reunion {
     //private List<Invitacion> invitaciones;
     private List<Nota> notas;
     private List<Invitable> invitados;
+    private List<Retraso> retrasos;
 
 
     public Reunion(Date fecha, Instant horaPrevista, Duration duracionPrevista, Empleado organizador, tipoReunion tipoReu) {
@@ -40,14 +41,14 @@ public abstract class Reunion {
     public void iniciar(){
         this.horaInicio=Instant.now();
     }
+    public void finalizar(){
+        this.horaFin=Instant.now();
+    }
 
     public void enviarInvitaciones() {
         for (Invitable invitado : invitados) {
             invitado.invitar(this);
         }
-    }
-    public void finalizar(){
-        this.horaFin=Instant.now();
     }
 
     public float calcularTiempoReal(){
@@ -58,12 +59,40 @@ public abstract class Reunion {
             return 0.0f;
         }
     }
+
     public void registrarAsistencia(Invitable invitado, Instant horaLlegada) {
         Asistencia nuevaAsistencia = new Asistencia((Empleado) invitado, horaLlegada, true);
         // Determinar si es tarde (10 minutos después de hora prevista como ejemplo)
         // desarrollar tema de los atrasos
         this.asistencias.add(nuevaAsistencia);
     }
+
+    /**
+     * @return lista de retrasos registrados en la reunión.
+     */
+    public List<Retraso> obtenerRetrasos(){
+        List<Retraso> retrasos1= new ArrayList<>();
+        for (Asistencia asistencia : asistencias){
+            if (asistencia instanceof Retraso) {
+                retrasos1.add((Retraso) asistencia);
+            }
+        }
+        return retrasos1;
+    }
+
+    /**
+     * @return Lista de ausencias registradas en la reunión.
+     */
+    public List<Asistencia> obtenerAusencias() {
+        List<Asistencia> ausencias = new ArrayList<>();
+        for (Asistencia asistencia : asistencias) {
+            if (!asistencia.getAsiste()){
+                ausencias.add(asistencia);
+            }
+        }
+        return ausencias;
+    }
+
     public int obtenerTotalAsistencia(){
         int total = 0;
         for (Asistencia asistencia : asistencias) {
@@ -85,7 +114,14 @@ public abstract class Reunion {
 
     public void setParticipantes(Empleado empleado){
         Asistencia asiste;
-        // falta desarrollar
+        if (horaInicio == null){
+            asiste = new Asistencia(empleado,horaInicio, true);
+            asistencias.add(asiste);
+        } else {
+            asiste = new Retraso(empleado,horaPrevista);
+            asistencias.add(asiste);
+            retrasos.add((Retraso) asiste);
+        }
     }
 
     public Date getFecha() { return fecha; }
@@ -95,7 +131,6 @@ public abstract class Reunion {
     public Empleado getOrganizador() { return organizador; }
     public tipoReunion getTipoReunion() { return tipoReunion; }
     public List<Invitable> getListaInvitados() { return new ArrayList<>(invitados); }
-    public List<Asistencia> getAsistencias() { return new ArrayList<>(asistencias); }
     public List<Nota> getNotas() { return new ArrayList<>(notas); }
 
     @Override
