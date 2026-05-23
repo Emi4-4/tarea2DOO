@@ -37,7 +37,10 @@ public abstract class Reunion {
         }
     }
 
-    public void iniciar(){
+    public void iniciar() throws ReunionYaIniciada{
+        if (this.horaInicio != null) {
+            throw new ReunionYaIniciada("La reunion ya fue iniciada");
+        }
         this.horaInicio=Instant.now();
     }
 
