@@ -20,6 +20,7 @@ public class Asistencia {
     public void setAsiste(boolean asiste) {
         this.asiste = asiste;
     }
+    public boolean getAsiste() { return asiste;}
 
     public Empleado getEmpleado() {
         return this.empleado;
