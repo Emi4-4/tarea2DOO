@@ -15,7 +15,6 @@ public abstract class Reunion {
     private Instant horaFin;
     private tipoReunion tipoReunion;
     private List<Asistencia> asistencias;
-    //private List<Invitacion> invitaciones;
     private List<Nota> notas;
     private List<Invitable> invitados;
     private List<Retraso> retrasos;
@@ -41,6 +40,7 @@ public abstract class Reunion {
     public void iniciar(){
         this.horaInicio=Instant.now();
     }
+
     public void finalizar(){
         this.horaFin=Instant.now();
     }
@@ -51,12 +51,19 @@ public abstract class Reunion {
         }
     }
 
-    public float calcularTiempoReal(){
-        if (this.horaInicio != null && this.horaFin != null) {
-            Duration duracion = Duration.between(this.horaInicio, this.horaFin);
-            return (float) duracion.toSeconds();
-        }else{
-            return 0.0f;
+    public void setParticipantes(Empleado empleado) throws ReunionHaFinalizadoExcepcion {
+        if (horaFin != null ){
+            throw new ReunionHaFinalizadoExcepcion("La reunión ya ha finalizado.");
+        }else {
+            Asistencia asiste;
+            if (horaInicio == null) {
+                asiste = new Asistencia(empleado, horaInicio, true);
+                asistencias.add(asiste);
+            } else {
+                asiste = new Retraso(empleado, horaPrevista);
+                asistencias.add(asiste);
+                retrasos.add((Retraso) asiste);
+            }
         }
     }
 
@@ -65,6 +72,15 @@ public abstract class Reunion {
         // Determinar si es tarde (10 minutos después de hora prevista como ejemplo)
         // desarrollar tema de los atrasos
         this.asistencias.add(nuevaAsistencia);
+    }
+
+    public void agregarNota(String cuerpo) throws MensajeNuloExcepcion {
+        if (cuerpo == null){
+            throw new MensajeNuloExcepcion("El contenido de la nota no debe ser nulo");
+        } else {
+            Nota nota=new Nota(cuerpo);
+            this.notas.add(nota);
+        }
     }
 
     /**
@@ -103,6 +119,7 @@ public abstract class Reunion {
         return total;
 
     }
+
     public float obtenerPorcentajeAsistencia(){
         int totalAsistencia = obtenerTotalAsistencia();
         int totalInvitados = this.invitados.size(); // Suponiendo que participantes incluye a todos los invitados
@@ -112,15 +129,12 @@ public abstract class Reunion {
         return (totalAsistencia / (float) totalInvitados) * 100;
     }
 
-    public void setParticipantes(Empleado empleado){
-        Asistencia asiste;
-        if (horaInicio == null){
-            asiste = new Asistencia(empleado,horaInicio, true);
-            asistencias.add(asiste);
-        } else {
-            asiste = new Retraso(empleado,horaPrevista);
-            asistencias.add(asiste);
-            retrasos.add((Retraso) asiste);
+    public float calcularTiempoReal(){
+        if (this.horaInicio != null && this.horaFin != null) {
+            Duration duracion = Duration.between(this.horaInicio, this.horaFin);
+            return (float) duracion.toSeconds();
+        }else{
+            return 0.0f;
         }
     }
 
