@@ -49,3 +49,8 @@ Justificación: Desacopla la lógica de generación y formateo de reportes o act
 * **Método `asistio(): boolean` (o atributo `asiste`) en `Asistencia`:**
   * **Explicación:** Se añadió este estado booleano y su método de consulta en la clase `Asistencia`.
   * **Justificación:** Permite verificar de forma rápida y directa si el empleado estuvo presente o no en la reunión, facilitando el filtro de datos al momento de calcular los porcentajes totales de asistencia y ausencias.
+
+* **Nuevos métodos en la clase `Departamento`:**
+  * **Explicación:** Se añadieron los métodos `agregarEmpleados(empleado: Empleado)`, `getEmpleados()`, `getNombreDepartamento()`, `toString()` e `invitar(reunion: Reunion)`.
+  * **Cómo se aplica (Justificación):** * `agregarEmpleados` y `getEmpleados` se aplican para poblar y manipular directamente la lista interna de trabajadores del área.
+    * `invitar(reunion: Reunion)` permite recorrer de forma automatizada (mediante un bucle interno) a todos los empleados de ese departamento para convocarlos a la reunión masivamente en una sola acción.
