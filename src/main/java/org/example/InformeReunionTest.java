@@ -8,13 +8,28 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Clase de pruebas unitarias encargada de validar la correcta generación,
+ * escritura y contenido del archivo de texto del informe de reuniones.
+ * @author Lenin
+ * @version 1.0
+ */
 public class InformeReunionTest{
     private final String ARCHIVO = "informe_reunion.txt";
+    /**
+     * Limpia el entorno de pruebas eliminando el archivo generado
+     * después de la ejecución de cada test.
+     * * @throws Exception Si ocurre un error al intentar borrar el archivo.
+     */
     @AfterEach
     void cleanup() throws Exception {
         Files.deleteIfExists(Paths.get(ARCHIVO));
     }
+
+    /**
+     * Verifica que el método GenerarInforme cree exitosamente el archivo físico
+     * y que contenga las etiquetas, nombres de participantes y métricas correctas.
+     */
     @Test
     void generarinforme(){
         //Datos base para una reunion

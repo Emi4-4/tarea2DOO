@@ -5,7 +5,14 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * Clase abstracta que define la estructura y el comportamiento base para la gestión
+ * de reuniones, controlando asistencia, tiempos, notas e invitaciones.
+ * @author valentina
+ * @author Emiliano
+ * @author Lenin
+ * @version 1.0
+ */
 public abstract class Reunion {
     private Date fecha;
     private Instant horaPrevista;
@@ -19,6 +26,14 @@ public abstract class Reunion {
     private List<Invitable> invitados;
     private List<Retraso> retrasos;
 
+    /**
+     * Inicializa los componentes base de una reunión y prepara las listas de control.
+     * * @param fecha            Fecha programada para el evento.
+     * @param horaPrevista     Instante de tiempo planificado para el inicio.
+     * @param duracionPrevista Tiempo estimado de duración del bloque.
+     * @param organizador      Empleado que convoca y lidera la reunión.
+     * @param tipoReu          Clasificación temática del tipo de reunión.
+     */
 
     public Reunion(Date fecha, Instant horaPrevista, Duration duracionPrevista, Empleado organizador, tipoReunion tipoReu) {
         this.fecha=fecha;
@@ -30,30 +45,44 @@ public abstract class Reunion {
         this.notas = new ArrayList<>();
         this.asistencias = new ArrayList<>();
     }
-
+    /**
+     * Agrega una entidad a la nómina de invitados de la reunión.
+     * * @param invitado El elemento (empleado o departamento) a añadir.
+     */
     public void setInvitado(Invitable invitado) {
         if (invitado != null) {
             this.invitados.add(invitado);
         }
     }
-
+    /**
+     * Registra el inicio formal de la reunión guardando la hora del sistema.
+     * * @throws ReunionYaIniciada Si el evento ya se encuentra en desarrollo.
+     */
     public void iniciar() throws ReunionYaIniciada{
         if (this.horaInicio != null) {
             throw new ReunionYaIniciada("La reunion ya fue iniciada");
         }
         this.horaInicio=Instant.now();
     }
-
+    /**
+     * Registra la finalización formal de la reunión congelando el instante actual.
+     */
     public void finalizar(){
         this.horaFin=Instant.now();
     }
-
+    /**
+     * Recorre la lista de invitados y dispara el envío de notificaciones correspondiente.
+     */
     public void enviarInvitaciones() {
         for (Invitable invitado : invitados) {
             invitado.invitar(this);
         }
     }
-
+    /**
+     * Incorpora y clasifica a un participante en la nómina según el estado temporal de la reunión.
+     * * @param empleado El empleado que se incorpora al flujo.
+     * @throws ReunionHaFinalizadoExcepcion Si se intenta añadir participantes a una reunión cerrada.
+     */
     public void setParticipantes(Empleado empleado) throws ReunionHaFinalizadoExcepcion {
         if (horaFin != null ){
             throw new ReunionHaFinalizadoExcepcion("La reunión ya ha finalizado.");
@@ -69,14 +98,22 @@ public abstract class Reunion {
             }
         }
     }
-
+    /**
+     * Registra la ficha de presencia de un invitado indicando su hora exacta de llegada.
+     * * @param invitado    Entidad que hace ingreso a la reunión.
+     * @param horaLlegada Instante en el que se registra la asistencia.
+     */
     public void registrarAsistencia(Invitable invitado, Instant horaLlegada) {
         Asistencia nuevaAsistencia = new Asistencia((Empleado) invitado, horaLlegada, true);
         // Determinar si es tarde (10 minutos después de hora prevista como ejemplo)
         // desarrollar tema de los atrasos
         this.asistencias.add(nuevaAsistencia);
     }
-
+    /**
+     * Añade una nota descriptiva al acta de la reunión tras verificar su contenido.
+     * * @param cuerpo El texto explicativo de la anotación.
+     * @throws MensajeNuloExcepcion Si el texto adjunto es nulo o inválido.
+     */
     public void agregarNota(String cuerpo) throws MensajeNuloExcepcion {
         if (cuerpo == null){
             throw new MensajeNuloExcepcion("El contenido de la nota no debe ser nulo");
@@ -111,7 +148,10 @@ public abstract class Reunion {
         }
         return ausencias;
     }
-
+    /**
+     * Calcula la cantidad total de participantes que marcaron asistencia como presente.
+     * * @return El número total de asistentes confirmados.
+     */
     public int obtenerTotalAsistencia(){
         int total = 0;
         for (Asistencia asistencia : asistencias) {
@@ -122,7 +162,10 @@ public abstract class Reunion {
         return total;
 
     }
-
+    /**
+     * Calcula el porcentaje de asistencia en base al total de entidades invitadas.
+     * * @return El porcentaje de asistencia (de 0.0 a 100.0).
+     */
     public float obtenerPorcentajeAsistencia(){
         int totalAsistencia = obtenerTotalAsistencia();
         int totalInvitados = this.invitados.size(); // Suponiendo que participantes incluye a todos los invitados
@@ -131,7 +174,10 @@ public abstract class Reunion {
         }
         return (totalAsistencia / (float) totalInvitados) * 100;
     }
-
+    /**
+     * Calcula la duración real en segundos transcurrida entre el inicio y el fin de la reunión.
+     * * @return El tiempo total de la reunión en segundos, o 0.0f si no ha iniciado/finalizado.
+     */
     public float calcularTiempoReal(){
         if (this.horaInicio != null && this.horaFin != null) {
             Duration duracion = Duration.between(this.horaInicio, this.horaFin);

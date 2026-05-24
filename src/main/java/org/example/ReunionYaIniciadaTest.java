@@ -4,9 +4,18 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+/**
+ * Clase de pruebas unitarias encargada de verificar el comportamiento de control
+ * de estados de la reunión y la correcta emisión de excepciones ante re-inicios.
+ * @author Lenin
+ * @version 1.0
+ */
 public class ReunionYaIniciadaTest {
-
+    /**
+     * Valida que al intentar invocar el método iniciar() por segunda vez sobre
+     * una misma reunión, el sistema lance de manera controlada una excepción ReunionYaIniciada.
+     * @throws ReunionYaIniciada Si ocurre un error inesperado en la primera inicialización.
+     */
     @Test
     public void noDebeIniciarDosVeces() throws ReunionYaIniciada {
 

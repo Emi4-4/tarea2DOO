@@ -2,8 +2,18 @@ package org.example;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
+/**
+ * Clase utilitaria encargada de exportar y consolidar las estadísticas,
+ * notas y participantes de una reunión en un archivo de texto externo.
+ * @author Lenin
+ * @version 1.0
+ */
 public class InformeReunion {
+    /**
+     * Genera un archivo de texto llamado "informe_reunion.txt" con el resumen completo
+     * de la reunión, incluyendo asistencia, duración, notas y lista de invitados.
+     * * @param Reunion La reunión de la cual se extraerán los datos para el reporte.
+     */
     public static void GenerarInforme (Reunion Reunion){
         try {
             PrintWriter writer = new PrintWriter(new FileWriter("informe_reunion.txt"));
